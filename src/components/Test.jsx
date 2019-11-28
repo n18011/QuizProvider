@@ -1,19 +1,20 @@
 import React, { useContext } from 'react'
 
 import {
-    Switch, Typography
+    Switch,
+    Button,
+    Typography
 } from '@material-ui/core'
 import { StateContext } from '../context/State'
 
 export default () => {
-    const { changeThemeForDark } = useContext(StateContext)
+    const { handleQuiz } = useContext(StateContext)
 
 
     return (
         <>
-            <Switch color='primary' onChange={() => changeThemeForDark()} />
-            <Typography color="textPrimary" >primary</Typography>
-            <Typography color="textSecondary" >secondary</Typography>
+        <Button onClick={() => handleQuiz('seaj0')}>seaj0</Button>
+        <Button onClick={() => handleQuiz('seaj1')}>seaj1</Button>
         </>
     )
 }

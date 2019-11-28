@@ -7,7 +7,9 @@ import Test from './components/Test'
 
 
 export default () => {
-  // TODO:reducerの設定
+  // reducerの設定
+  // firebaseの接続設定
+  // firestoreの接続確認
   // TODO:context of reducerの設定
   // TODO:themeの設定
 

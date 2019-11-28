@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from 'react'
 
-
-const initialState = {
-  isDark: false
-}
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'isDark':
-      return { ...state, isDark: !state.isDark }
-    default:
-      throw new Error()
-  }
-}
+import { initialState, reducer } from './reducer'
 
 const StateContext = createContext()
 
@@ -22,8 +10,11 @@ const StateProvider = ({ children }) => {
   const changeThemeForDark = () => {
     dispatch({ type: 'isDark' })
   }
+  const handleQuiz = (quizId) => {
+    dispatch({type: 'sel_quiz', payload: quizId})
+  }
   return (
-    <StateContext.Provider value={{ state, changeThemeForDark }}>
+    <StateContext.Provider value={{ state, changeThemeForDark, handleQuiz }}>
       {children}
     </StateContext.Provider>
   )
