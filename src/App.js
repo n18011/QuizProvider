@@ -1,6 +1,10 @@
 import React from 'react';
 // import logo from './logo.svg';
 // import './App.css';
+import { StateProvider } from './context/State'
+import ThemeProvider from './context/Theme'
+import Test from './components/Test'
+
 
 export default () => {
   // TODO:reducerの設定
@@ -24,8 +28,11 @@ export default () => {
   //TODO:seajのdataをfirestoreへ
 
   return (
-    <div className="App">
-    </div>
+    <StateProvider>
+      <ThemeProvider>
+        <Test />
+      </ThemeProvider>
+    </StateProvider>
   );
 }
 
