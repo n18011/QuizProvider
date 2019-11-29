@@ -3,7 +3,7 @@ import React from 'react';
 // import './App.css';
 import { StateProvider } from './context/State'
 import ThemeProvider from './context/Theme'
-import Test from './components/Test'
+import Router from './components/Router'
 
 
 export default () => {
@@ -32,7 +32,7 @@ export default () => {
   return (
     <StateProvider>
       <ThemeProvider>
-        <Test />
+        <Router></Router>
       </ThemeProvider>
     </StateProvider>
   );

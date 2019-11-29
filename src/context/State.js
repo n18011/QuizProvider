@@ -10,11 +10,15 @@ const StateProvider = ({ children }) => {
   const changeThemeForDark = () => {
     dispatch({ type: 'isDark' })
   }
-  const handleQuiz = (quizId) => {
-    dispatch({type: 'sel_quiz', payload: quizId})
+  const handleQuiz = (payload) => {
+    dispatch({type: 'sel_quiz', payload})
   }
+  const sendResult = (payload) => {
+    dispatch({type: 'send_result', payload})
+  }
+
   return (
-    <StateContext.Provider value={{ state, changeThemeForDark, handleQuiz }}>
+    <StateContext.Provider value={{ state, changeThemeForDark, handleQuiz, sendResult }}>
       {children}
     </StateContext.Provider>
   )

@@ -3,7 +3,8 @@ import localforage from 'localforage'
 
 const initialState = {
   isDark: false,
-  quizData: []
+  quizData: [],
+  result: []
 }
 
 const reducer = (state, action) => {
@@ -57,6 +58,14 @@ const reducer = (state, action) => {
 
       return { ...state, quizData }
 
+      /**
+       * response [SET]:
+       */
+    case 'send_result':
+      const result = []
+      result.push(action.payload)
+      // TODO:localforageに結果を送信
+      return { ...state, result}
 
     default:
       throw new Error()

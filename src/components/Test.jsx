@@ -8,13 +8,14 @@ import {
 import { StateContext } from '../context/State'
 
 export default () => {
-    const { handleQuiz } = useContext(StateContext)
+    const { handleQuiz, sendResult } = useContext(StateContext)
 
 
     return (
         <>
-        <Button onClick={() => handleQuiz('seaj0')}>seaj0</Button>
-        <Button onClick={() => handleQuiz('seaj1')}>seaj1</Button>
+        <Button href='/quiz/seaj0' onClick={() => handleQuiz('seaj0')}>seaj0</Button>
+        <Button href='/quiz/seaj1' onClick={() => handleQuiz('seaj1')}>seaj1</Button>
+        <Button  onClick={() => sendResult({q1: '正解', q2: '不正解'})}>send result</Button>
         </>
     )
 }
