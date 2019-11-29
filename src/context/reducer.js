@@ -21,32 +21,30 @@ const reducer = (state, action) => {
      * getIndexedDB.localforage or getFirestoreData->setIndexedDB.loaclforage
     **/
     case 'sel_quiz':
-      const docRef = firestore.collection('seaj').doc(action.payload)
+      const colRef = firestore.collection('seaj').doc(action.payload).collection('questions')
       const quizData = []
       // data get to indexedDB.localforage
       localforage.getItem(action.payload)
         .then((value) => {
           console.log('localforage.getItem => ', value)
           if (value !== null) {
-            quizData.push(value)
+            value.map(v => quizData.push(v))
           } else {
             // get FireStore data
-            docRef.get().then(async (doc) => {
-              if (doc.exists) {
+            colRef.get().then(async(snapshot) => {
+              await snapshot.forEach((doc) => {
                 console.log('doc.data => ', doc.data())
-                await quizData.push(doc.data())
+                quizData.push(doc.data())
+            })
                 // data set to indexedDB.localforage
-                await localforage.setItem(action.payload, doc.data())
+                await localforage.setItem(action.payload, quizData)
                   .then(value => {
                     console.log('sucess setItem local => ', value)
                   })
                   .catch(err => {
                     console.log('Error setItem local => ', err)
                   })
-              } else {
-                console.log('doc undifined')
-              }
-            })
+          })
               .catch(error => {
                 console.log('Error getting document', error)
               })
@@ -56,15 +54,38 @@ const reducer = (state, action) => {
           console.log('localforage.getItem error => ', err)
         })
 
-      return { ...state, quizData }
+      return { ...state, quizData}
 
       /**
        * response [SET]:
        */
     case 'send_result':
       const result = []
-      result.push(action.payload)
       // TODO:localforageに結果を送信
+      localforage.getItem('result')
+      .then(async (value) => {
+        console.log('localforage.getItem result => ', value)
+          await result.push(action.payload)
+          await localforage.setItem('result', result)
+          .then(value => {
+            console.log('localforage.setItem result => ', value)
+          })
+          .catch(err => {
+            console.log('localforage.setItem error', err)
+          })
+        /*
+        const res = value
+        await res.push(action.payload)
+        await result.push(action.payload)
+        await localforage.setItem('result', res)
+      .then(value => {
+        console.log('localforage.setItem result => ', value)
+      })
+      .catch(err => {
+        console.log('localforage.setItem error => ', err)
+      })
+      */
+      })
       return { ...state, result}
 
     default:
