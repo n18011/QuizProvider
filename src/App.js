@@ -13,8 +13,8 @@ export default () => {
   // TODO:context of reducerの設定
   // TODO:themeの設定
 
-  // TODO:localforageの接続設定
-  // TODO:context of localforageの設定
+  // localforageの接続設定
+  // TODO:context of localforageの設定(いらない)
 
   // TODO:routingの設定
   // TODO:HeaderTemplate componentの作成

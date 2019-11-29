@@ -1,4 +1,5 @@
-import {firestore} from './firebase'
+import { firestore } from './firebase'
+import localforage from 'localforage'
 
 const initialState = {
   isDark: false,
@@ -7,35 +8,56 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
+    /**
+     * state中のisDarkのboolを反転
+     * response [UPDATE]: {isDark: !state.isDark}
+     */
     case 'isDark':
       return { ...state, isDark: !state.isDark }
+
+    /**
+     * response [UPDATE]: {quizData: data}
+     * getIndexedDB.localforage or getFirestoreData->setIndexedDB.loaclforage
+    **/
     case 'sel_quiz':
-      //TODO:read only cache if !cache network get data
       const docRef = firestore.collection('seaj').doc(action.payload)
-      const data = []
-      docRef.get({source: 'cache'})
-      .then(doc => {
-        console.log('Cached document data: ', doc.data())
-        data.push(doc.data())
-      })
-      .catch(error => {
-        console.log('Error getting cached document => ', error)
-      })
-      // network get data
-      /*
-      docRef.get().then(doc => {
-        if (doc.exists) {
-        console.log('doc.data => ', doc.data())
-        data.push(doc.data())
-        } else {
-          console.log('doc undifined')
-        }
-      })
-      .catch(error => {
-        console.log('Error getting document', error)
-      })
-      */
-      return { ...state, quizData: data}
+      const quizData = []
+      // data get to indexedDB.localforage
+      localforage.getItem(action.payload)
+        .then((value) => {
+          console.log('localforage.getItem => ', value)
+          if (value !== null) {
+            quizData.push(value)
+          } else {
+            // get FireStore data
+            docRef.get().then(async (doc) => {
+              if (doc.exists) {
+                console.log('doc.data => ', doc.data())
+                await quizData.push(doc.data())
+                // data set to indexedDB.localforage
+                await localforage.setItem(action.payload, doc.data())
+                  .then(value => {
+                    console.log('sucess setItem local => ', value)
+                  })
+                  .catch(err => {
+                    console.log('Error setItem local => ', err)
+                  })
+              } else {
+                console.log('doc undifined')
+              }
+            })
+              .catch(error => {
+                console.log('Error getting document', error)
+              })
+          }
+        })
+        .catch((err) => {
+          console.log('localforage.getItem error => ', err)
+        })
+
+      return { ...state, quizData }
+
+
     default:
       throw new Error()
   }
